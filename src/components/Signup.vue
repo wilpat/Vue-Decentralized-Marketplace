@@ -1,21 +1,34 @@
 <template>
-  <section id='signup'>
-    <h1>Sign up</h1>
-    <div class="form">
-      <div class="">
 
-        <label for="email">Email</label>
-        <input name="email" v-model="form.email">
+  <div class="login-wrapper">
 
-        <label for="password">Password</label>
-        <input name="password" v-model="form.password" type="password">
-
-        <button class="btn" @click="signup" name="signup">Sign up</button>
-        <button class="btn" @click="test" name="signup">Test</button>
+    <div class="login-left">
+      <img height="100" src="../assets/shop.png">
+    </div>
+    <form class="login-right" @submit.prevent>
+      <div class="h2">Sign up</div>
+      <div class="form-group">
+        <input type="text" id="email" placeholder="Email" v-model="form.email">
+        <label for="email">Email</label>    
+      </div>
+      <div class="form-group">
+        <input type="password" id="Password" placeholder="Password" v-model="form.password">
+        <label for="Password">Password</label>    
+      </div>
+      <!-- <div class="checkbox-container">
+         <input type="checkbox" v-model="rememberMe">
+         <div class="text-checkbox">Remember me</div>
+       </div> --> 
+      <div class="button-area">
+        <button class="btn btn-primary float-right" @click="signup" >Signup</button>
+        <router-link to ="/login" class="btn btn-primary float-right" style="padding-top: 8px">Login</router-link>
 
       </div>
-    </div>
-  </section>
+      
+    </form>
+
+  </div>
+
 </template>
 
 <script>
@@ -33,6 +46,13 @@
     },
     beforeCreate: function () {
       Users.init()
+    },
+    beforeMount () {
+      let init = 1000
+      setTimeout(function () {
+        document.querySelector('.login-wrapper').classList.toggle('open')
+        init = 300
+      }, init)
     },
     methods: {
       signup: function () {

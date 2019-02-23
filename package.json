@@ -14,7 +14,7 @@
     "test/dapp": "npm run unit && npm run e2e",
     "test": "npm run test/truffle && npm run test/dapp",
     "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
-    "serve" : "node index.js"
+    "serve": "node index.js"
   },
   "dependencies": {
     "@babel/core": "^7.3.3",
@@ -37,7 +37,7 @@
     "vue": "^2.6.7",
     "vue-router": "^2.8.1",
     "vuex": "^3.1.0",
-    "web3": "^1.0.0-beta.34",
+    "web3": "^1.0.0-beta.36",
     "web3-eth-personal": "^1.0.0-beta.46",
     "web3-hdwallet-provider": "^1.0.4-fix2"
   },
