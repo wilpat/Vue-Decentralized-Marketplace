@@ -1,0 +1,20 @@
+{
+    "presets": [
+        ["babel-preset-env"],
+        ["env", { 
+	        	"modules": false ,
+	        	"targets": {
+		          "node": "current"
+		        }
+        	}
+        ],
+    ],
+
+    "plugins" : [
+    	["transform-runtime", {
+	      "polyfill": false,
+	      "regenerator": true
+	    }],
+	    "transform-object-rest-spread",
+    	]
+}

@@ -1,0 +1,153 @@
+{
+  "name": "truffle-vue",
+  "version": "0.2.0",
+  "description": "A vue.js truffle box",
+  "author": "osarrouy <olivier.sarrouy@gmail.com>",
+  "private": true,
+  "scripts": {
+    "dev": "node scripts/dev-server.js",
+    "start": "npm run dev",
+    "build": "node scripts/build.js",
+    "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
+    "e2e": "node test/e2e/runner.js",
+    "test/truffle": "truffle test test/truffle/*",
+    "test/dapp": "npm run unit && npm run e2e",
+    "test": "npm run test/truffle && npm run test/dapp",
+    "lint": "eslint --ext .js,.vue src test/unit/specs test/e2e/specs",
+    "serve" : "node server.js"
+  },
+  "dependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.2.0",
+    "acorn": "^6.1.0",
+    "axios": "^0.18.0",
+    "bignumber.js": "^8.0.2",
+    "browserslist": "^4.4.1",
+    "bulma": "^0.7.4",
+    "fs": "0.0.1-security",
+    "jsonwebtoken": "^8.5.0",
+    "nan": "^2.12.1",
+    "nyc": "^13.3.0",
+    "object-encode": "^1.0.2",
+    "scrypt": "^6.0.3",
+    "serve-static": "^1.13.2",
+    "truffle-contract": "^3.0.7",
+    "truffle-hdwallet-provider": "^1.0.4",
+    "uglifyjs-webpack-plugin": "^1.3.0",
+    "vue": "^2.6.7",
+    "vue-router": "^2.8.1",
+    "vuex": "^3.1.0",
+    "web3": "^1.0.0-beta.34",
+    "web3-eth-personal": "^1.0.0-beta.46",
+    "web3-hdwallet-provider": "^1.0.4-fix2"
+  },
+  "devDependencies": {
+    "autoprefixer": "^7.2.6",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^7.1.1",
+    "babel-loader": "^7.1.5",
+    "babel-plugin-istanbul": "^4.1.6",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-stage-2": "^6.22.0",
+    "babel-register": "^6.22.0",
+    "chai": "^3.5.0",
+    "chalk": "^2.4.2",
+    "chromedriver": "^2.46.0",
+    "connect-history-api-fallback": "^1.6.0",
+    "copy-webpack-plugin": "^4.6.0",
+    "cross-env": "^5.2.0",
+    "cross-spawn": "^5.0.1",
+    "css-loader": "^0.28.11",
+    "cssnano": "^3.10.0",
+    "eslint": "^3.19.0",
+    "eslint-config-standard": "^6.2.1",
+    "eslint-friendly-formatter": "^3.0.0",
+    "eslint-loader": "^2.1.2",
+    "eslint-plugin-html": "^3.0.0",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^2.0.1",
+    "eventsource-polyfill": "^0.9.6",
+    "express": "^4.16.4",
+    "extract-text-webpack-plugin": "^3.0.0",
+    "file-loader": "^0.11.1",
+    "friendly-errors-webpack-plugin": "^1.7.0",
+    "html-webpack-plugin": "^3.2.0",
+    "http-proxy-middleware": "^0.17.3",
+    "inject-loader": "^4.0.1",
+    "karma": "^1.4.1",
+    "karma-coverage": "^1.1.2",
+    "karma-mocha": "^1.3.0",
+    "karma-phantomjs-launcher": "^1.0.2",
+    "karma-phantomjs-shim": "^1.4.0",
+    "karma-sinon-chai": "^1.3.4",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-spec-reporter": "0.0.31",
+    "karma-webpack": "^2.0.13",
+    "mocha": "^3.2.0",
+    "nightwatch": "^0.9.21",
+    "node-sass": "^4.11.0",
+    "opn": "^5.4.0",
+    "optimize-css-assets-webpack-plugin": "^2.0.0",
+    "ora": "^1.4.0",
+    "phantomjs-prebuilt": "^2.1.16",
+    "rimraf": "^2.6.3",
+    "sass-loader": "^6.0.7",
+    "selenium-server": "^3.141.59",
+    "semver": "^5.6.0",
+    "shelljs": "^0.7.6",
+    "sinon": "^2.1.0",
+    "sinon-chai": "^2.8.0",
+    "url-loader": "^0.5.8",
+    "vue-loader": "^13.7.3",
+    "vue-style-loader": "^3.1.2",
+    "vue-template-compiler": "^2.6.7",
+    "webpack": "^3.1.0",
+    "webpack-bundle-analyzer": "^2.13.1",
+    "webpack-dev-middleware": "^2.0.3",
+    "webpack-hot-middleware": "^2.24.3",
+    "webpack-merge": "^4.2.1"
+  },
+  "engines": {
+    "node": ">= 4.0.0",
+    "npm": ">= 3.0.0"
+  },
+  "browserslist": [
+    "> 1%",
+    "last 2 versions",
+    "not ie <= 8"
+  ],
+  "babel": {
+    "presets": [
+      [
+        "env",
+        {
+          "modules": false,
+          "targets": {
+            "browsers": [
+              "> 1%",
+              "last 2 versions",
+              "not ie <= 8"
+            ]
+          }
+        }
+      ],
+      "stage-2"
+    ],
+    "plugins": [
+      "transform-runtime"
+    ],
+    "env": {
+      "test": {
+        "presets": [
+          "env",
+          "stage-2"
+        ],
+        "plugins": [
+          "istanbul"
+        ]
+      }
+    }
+  }
+}

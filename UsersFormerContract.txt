@@ -1,0 +1,36 @@
+pragma solidity ^0.5.0;
+
+contract Users {
+
+  // mapping(address => bytes32) public users;
+  mapping(address => string) public users;// Map the address to the email of users
+
+  event UserCreated(address indexed _address, string _email);
+  event UserDestroyed(address indexed _address);
+
+  function exists (address _address) public view returns (bool _exists) {
+    return (bytes(users[_address]).length != 0);
+  }
+
+  function authenticate () public view returns (string memory _email) {
+    require(exists(msg.sender));
+    return (users[msg.sender]);
+  }
+
+  function create (string memory _email) public {
+    users[msg.sender] = _email ;
+    emit UserCreated(msg.sender, _email);
+  }
+
+  function destroy () public {
+    require(exists(msg.sender));
+    delete users[msg.sender];
+    emit UserDestroyed(msg.sender);
+  }
+
+  function get (address _address) public view returns(string memory _email) {
+    require(exists(_address));
+    return (users[_address]);
+  }
+
+}
