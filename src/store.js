@@ -36,6 +36,10 @@ export default {
 
 		updateBalance(state, payload){
 			state.balance = payload
+		},
+
+		updateMessage(state, payload){
+			state.message = payload
 		}
 	},
 

@@ -58,8 +58,8 @@
     },
     methods: {
       login () {
-        this.loading = true
         if (this.form.email !== '' && this.form.password !== '') {
+          this.loading = true
           let data = {
             email: this.form.email,
             password: this.form.password
@@ -77,7 +77,7 @@
             }
             this.$store.commit('loginSuccess', load)// Pass the user deets and the token to the store to register
             this.$store.commit('updateBalance', parseFloat(tx.balance).toFixed(3))
-            this.$store.message = ''
+            this.$store.state.message = ''
             this.loading = false
             this.$router.push('/')
           })
@@ -85,6 +85,8 @@
             this.loading = false
             console.log(err)
           })
+        } else {
+          this.$store.state.message = 'Missing field(s)'
         }
       }
 

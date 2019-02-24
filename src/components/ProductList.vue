@@ -36,7 +36,7 @@
 	            		{{ loaded ? 'No item for sale.' : 'Loading items' }}
 	            	</h5>
 
-	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-4 mr-4">
+	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-4 mr-1">
 				       	<div>
 				         <div class="card card-default card-article" style="text-align: left;">
 				           <div class="card-heading">
@@ -229,5 +229,8 @@
 	.modal{
 		display: block;
 		background: rgba(0,0,0,0.6);
+	}
+	.col-lg-4{
+		max-width: 32%;
 	}
 </style>
