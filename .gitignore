@@ -4,6 +4,5 @@
 /node_modules
 /.github
 /build
-.secret
-.ropsten_key
-.kaleido_key
+UsersFormerContract.txt
+/dist
