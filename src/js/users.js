@@ -40,9 +40,6 @@ const Users = {
     let self = this
     try { // We need to set the coinbase for interactions with the smart contract on ropsten which is in linked by web3
           window.web3.eth.getCoinbase((err, account) => {
-          // const test = window.web3.personal.newAccount('pass1234')
-          // console.log(test)
-          // console.log(account)
           if (err === null) {
             self.web3Coinbase = account
           }
@@ -54,9 +51,6 @@ const Users = {
     if(window.kaleido){ // Set general coinbase for kaleido
       try {
             window.kaleido.eth.getCoinbase((err, account) => {
-            // const test = window.kaleido.personal.newAccount('pass1234')
-            // console.log(test)
-            // console.log(account)
             if (err === null) {
               self.coinbase = account
               // $('#account').text(account);
@@ -177,7 +171,6 @@ const Users = {
             reject(err)
           })
     })
-    // console.log(balance)
     //Finally create the account
     store.state.message = "Making final configurations..."
     const account = await new Promise((resolve, reject) => {
@@ -191,7 +184,6 @@ const Users = {
         tx.token = token
         tx.balance = balance
         resolve(tx)
-        // console.log(window.web3.eth.accounts)
       }).catch(err => {
         store.state.message = "An error occurred"
         reject(err)
@@ -201,48 +193,9 @@ const Users = {
     
     },
 
-  /*create: function (data) {
-    let self = this
-
-    return new Promise((resolve, reject) => {
-      if (!window.web3.currentProvider.hdwallet && !window.kaleido) {
-          const address = window.kaleido.personal.newAccount(data.password) // Create a new address with this password
-      } else{
-        window.kaleido.eth.personal.newAccount(data.password).then(addr =>{
-          const address = addr
-          console.log(address)
-        }) // Create a new address with this password
-        console.log(data.password)
-      }
-      self.userAddress = address
-      self.transferCoins(self.coinbase, address, data.password) // Transfer some ether from the coinbase to it to start with
-          .then(balance => {
-            // console.log('As' + balance)
-            self.instance.create( // Store this account on the smart contract with the email
-                data.email,
-                address,
-                {from: self.coinbaseAddress}
-              ).then(tx => {
-                tx.userAddress = address
-                let token = jwt.sign({ email: data.email }, config.secret, { expiresIn: 86400 /* expires in 24 hours  })
-                tx.token = token
-                tx.balance = balance
-                resolve(tx)
-                // console.log(window.web3.eth.accounts)
-              }).catch(err => {
-                reject(err)
-              })
-          }).catch(console.log)
-    })  
-  },*/
-
   transferCoins: async function (coinbaseAddress, address, pwd) {
     try {
-      /*console.log('Coinbase: ' + coinbaseAddress)
-      console.log('Created address: ' + address)
-      console.log('password: ' + pwd)*/
-      // await window.web3.personal.unlockAccount(coinbaseAddress, 'pass1234', 1000)
-      // await window.kaleido.eth.personal.unlockAccount(address, pwd, 86400)
+
       var amt;
       var result;
       if (!window.kaleido) { // Means this isnt kaleido
@@ -263,16 +216,8 @@ const Users = {
         })
       }
 
-      /*console.log('Done with transfer')
-      console.log(result)*/
       if (result) {
-        // console.log('sent money')
-        // console.log('Me ' + result)
-        // const coinbaseBal = await window.web3.eth.getBalance(coinbase_address);
-        // console.log("coinbase balance" + window.web3.utils.fromWei(coinbaseBal, "ether") + " ETH");
         const addressBal = await window.kaleido.eth.getBalance(address)
-        // console.log("address balance" + window.web3.utils.fromWei(addressBal, "ether") + " ETH");
-        // console.log('balance: ' + addressBal)
         if (!window.kaleido) {
           amt = window.web3.fromWei(addressBal, 'ether')
         } else{
@@ -283,21 +228,6 @@ const Users = {
     } catch (err) {
       console.log(err)
     }
-  },
-
-  destroy: function (email) {
-    let self = this
-
-    return new Promise((resolve, reject) => {
-      self.instance.destroy(email,
-        {from: self.userAddress}
-      ).then(tx => {
-        // console.log(email)
-        resolve(tx)
-      }).catch(err => {
-        reject(err)
-      })
-    })
   },
 
   getBalance: async function (address) {
@@ -316,37 +246,6 @@ const Users = {
     }
   },
 
-  test: () => {
-    return window.web3.eth.accounts
-  },
-
-  /*login: async function (data) {
-    const { email, password } = data
-    let self = this
-    const bal = await self.getBalance(self.coinbaseAddress) // get the balance of this address
-    console.log(bal)
-    return await new Promise((resolve, reject) => {
-      self.instance.get(email,
-        {from: self.coinbase}
-      ).then(address => {
-        try{
-            window.web3.personal.unlockAccount(address, password, 86400)
-            self.userAddress = address
-            let tx = {}
-            tx.userAddress = self.userAddress
-            let token = jwt.sign({ email: email }, config.secret, { expiresIn: 86400 /* expires in 24 hours  })
-            tx.token = token
-            const addressBal = self.getBalance(address) // get the balance of this address
-            tx.balance = addressBal
-            resolve(tx)
-        } catch (err) {
-          reject('Invalid credentials')
-        }
-      }).catch(err => {
-        reject('Invalid login')
-      })
-    })
-  }*/
 }
 
 export default Users

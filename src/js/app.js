@@ -35,7 +35,6 @@ const App = {
           window.web3.eth.getCoinbase((err, account) => {
             if (err === null) {
               self.coinbase = account
-              // console.log(self.instance)
             }
           })
         } catch (err) {
@@ -46,8 +45,6 @@ const App = {
       loadItems: async function () {
         let self = this
         self.loading = true
-        // retrieve the items placeholder and clear it
-        // console.log(self.instance)
         const itemIds = await new Promise(function (resolve, reject) {
           self.instance.getItemsForSale()
           .then(itemIds => {
@@ -57,7 +54,6 @@ const App = {
           })
         })
 
-        // let res = await Promise.all([itemIds])
 
         let itemsArray = []
 
@@ -67,7 +63,6 @@ const App = {
           let itemFromPromise = await new Promise(function (resolve, reject) {
 
             self.instance.items(parseInt(itemId)).then(item => {//Get the item that corresponds to each id
-              // console.log(parseFloat(item[5]))
               let price = parseFloat(item[5]).toString()
               item[5] = parseFloat(window.web3.utils.fromWei(price, 'ether')).toFixed(6)
               resolve(item)
@@ -82,36 +77,7 @@ const App = {
         
       },
 
-      //getProductItems: async (cart) => {
-      // Get product objects
-      //   const productItemsPromise = cart.items.map(item => utils.blackAxios.get(`https://vendor-backend.thealternativemall.com/v1/auth/product/byid?_id=${item.product}`, {
-      //     headers: {
-      //       'Content-Type': 'application/json'
-      //     }
-      //   }))
-
-      //   let new_cart = JSON.stringify(cart)
-      //   new_cart = JSON.parse(new_cart)
-
-      //   const productItems = await Promise.all(productItemsPromise)
-      //   const items = []
-      //   for (let i = 0; i < new_cart.items.length; i++) {
-      //     if (productItems[i].data.status === 'success') {
-      //       const item = productItems[i].data.data
-      //       new_cart.items[i].product = item
-      //       items.push(new_cart.items[i])
-      //     }
-      //   }
-      //   new_cart.items = items
-      //   return new_cart
-      // }
-
-
      sellItem: function (_name, _price, _description) {
-      // Retreive the details of the item you wanna sell
-      /*console.log(_name)
-      console.log(_price)
-      console.log(_description)*/
       let self = this
       store.state.message = "Verifying transaction..."
       _price = window.web3.utils.toWei(_price, 'ether');
@@ -145,12 +111,7 @@ const App = {
       //github.com/MetaMask/metamask-extension/issues/2393
       self.instance.itemSold({}, {}).watch((error, event) =>{
         if(!error){
-          // console.log(event)
           store.state.events.push(event.args)
-          /*$('#events').append(`<li class ='list-group'>${event.args._name} is now for sale`);
-          if(self.mounted){
-            self.loadItems();//Rerender the app only after the first loading is complete 
-          }*/
         }else{
           console.error(error)
         }
@@ -176,7 +137,7 @@ const App = {
       console.log(_id)
       console.log(_price)
 
-    await self.instance.buyItem(_id, '0xde5ef9cbfcb1418f4f2bfa6350de05c5acd938ae', _price, {
+    await self.instance.buyItem(_id, self.userAccount.toLowerCase(), _price, {
       from: self.coinbase
     })
     store.state.message = "Paying for item..."
