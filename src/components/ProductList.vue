@@ -21,7 +21,7 @@
 	                <div class="card-title">
 	                  <button class="btn btn-info btn-lg float-left" data-toggle = "collapse" data-target="#events" aria-expanded="false" aria-controls="events">Events</button>
 	                  <button class="btn btn-info btn-lg  ml-3 float-right" @click ="logout">Logout</button>
-	                  <button class="btn btn-info btn-lg float-right" data-toggle = "modal" data-target="#sellItem">Sell an item</button>
+	                  <button class="btn btn-info btn-lg float-right" @click="sell = true">Sell an item</button>
 	                </div>
 	              </div>
 	              <ul id="events" class="collapse list-group">
@@ -57,14 +57,14 @@
 	    </div>
 
 	        <!-- Modal form to sell an item -->
-        <div class="modal fade" id="sellItem" role="dialog">
-          <div class="modal-dialog">
+        <div class="modal" id="sellItem" role="dialog" v-if="sell">
+          <div class="modal-dialog" v-if="sell">
 
             <!-- Modal content-->
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Sell your item</h4>
+            <div class="modal-content" v-if="sell">
+              <div class="modal-header d-block" v-if="sell">
+                <button type="button" class="close" @click ="sell = false">&times;</button>
+                <h5 class="modal-title">Sell your item</h5>
               </div>
               <div class="modal-body">
 
@@ -83,13 +83,14 @@
                         <label for="description">Description</label>
                         <textarea type="text" class="form-control vresize" v-model="description" placeholder="Describe your item" maxlength="255"></textarea>
                       </div>
+                      <p style="color: red"> {{ report }}</p>
                     </form>
                   </div>
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-success" data-dismiss="modal" @click="sellItem" >Submit</button>
-                <button type="button" class="btn" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-success" @click="sellItem" >Submit</button>
+                <button type="button" class="btn" @click ="sell = false">Close</button>
               </div>
             </div>
 
@@ -132,7 +133,9 @@
 				price: 1,
 				description: '',
 				items: [],
-				loading: false
+				loading: false,
+				sell: false,
+				report: ''
 			}
 		},
 		methods: {
@@ -154,17 +157,26 @@
 					})
 			},
 			sellItem () {
-
-				this.loading = true
-				App.sellItem(this.name, this.price, this.description)
-					.then(items =>{
-						this.loading = false
-						this.items = items
-					})
-					.catch(err => {
-						this.loading = false
-						console.log(err)
-					})
+				this.report = ''
+				if(this.name.trim() != '' && this.price != '' && this.price != 0 && this.description.trim() != '')
+				{
+					this.loading = true
+					// let price = window.web3.utils.toBN(this.price)
+					App.sellItem(this.name, this.price, this.description)
+						.then(items =>{
+							this.loading = false
+							this.sell = false
+							this.items = items
+						})
+						.catch(err => {
+							this.report = 'An error occured with your request'
+							this.loading = false
+							console.log(err)
+						})
+				}else{
+					this.report = 'Missing fields'
+				}
+				
 				// App.test()
 			},
 
@@ -198,5 +210,9 @@
 
 	.list-group{
 		text-align: left
+	}
+	.modal{
+		display: block;
+		background: rgba(0,0,0,0.6);
 	}
 </style>

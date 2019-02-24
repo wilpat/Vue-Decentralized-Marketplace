@@ -109,6 +109,9 @@ const App = {
 
      sellItem: function (_name, _price, _description) {
       // Retreive the details of the item you wanna sell
+      /*console.log(_name)
+      console.log(_price)
+      console.log(_description)*/
       let self = this
       store.state.message = "Verifying transaction..."
       _price = window.web3.utils.toWei(_price, 'ether');
