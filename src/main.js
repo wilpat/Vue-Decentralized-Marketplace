@@ -11,10 +11,12 @@ import storeData from './store'
 import axios from 'axios'
 import {initialize} from './helpers/general.js'
 import Web3HDWalletProvider from 'web3-hdwallet-provider'
+import { mnemonicTxt, infura_key, kaleido_key } from '../sec.js'
+
 // import HDWalletProvider from 'truffle-hdwallet-provider'
-
-const mnemonic = "mansion vocal brother anxiety empower oak noise prosper select rival intact rich"
-
+const mnemonic = process.env.MNEMONIC || mnemonicTxt.toString().trim();
+const infura = process.env.INFURA_KEY || infura_key.toString().trim();
+const kaleido = process.env.KALEIDO_KEY || kaleido_key.toString().trim();
 Vue.use(VueRouter)
 Vue.use(Vuex)
 let store = new Vuex.Store(storeData)
@@ -51,7 +53,7 @@ window.addEventListener('load', function () {
     
     // Below uses the Web3 HD Wallet to connect to ropsten
     // -- this help me communicate with my smart contract since kaleido doesnt work atm
-    var httpProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48')
+    var httpProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/' + infura)
     var provider = new Web3HDWalletProvider(mnemonic, httpProvider);
     window.web3 = new Web3(provider)
 
@@ -61,7 +63,7 @@ window.addEventListener('load', function () {
     // var provider = new HDWalletProvider(mnemonic, 'https://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48');
 
     //This is for kaleido -- it would help me manane user accounts
-    provider = new Web3.providers.HttpProvider('https://e0n06zi2jf:o7pe38R9iUyf3Nh5HuYTtV1e_hzQG_DlYckeWA-ICd0@e0ssu47hxk-e0l91isw19-rpc.eu-central-1.kaleido.io')
+    provider = new Web3.providers.HttpProvider(kaleido_key)
     window.kaleido = new Web3(provider)
   }
   initialize(store, router)

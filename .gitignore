@@ -5,4 +5,5 @@
 /.github
 /build
 .secret
-.api_key
+.ropsten_key
+.kaleido_key

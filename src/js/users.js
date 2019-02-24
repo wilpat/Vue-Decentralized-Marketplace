@@ -109,7 +109,7 @@ const Users = {
     const { email, password } = data
     let self = this
     store.state.message = "Checking your email..."
-    const address = await new Promise((resolve, reject) => {//Try the email
+    const address = await new Promise((resolve, reject) => {//Check if the email exists in the smart contract in ropsten
                         self.instance.get(email,
                           {from: self.coinbase}
                         ).then(data => resolve(data))
