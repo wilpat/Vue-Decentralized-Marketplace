@@ -32,9 +32,9 @@
 	            </div>
 
 	            <div id="itemsRow" class="row" style="margin: .25rem!important">
-	            	<h4 v-if="!items.length" style="margin: 0 auto;">
-	            		No item for sale.
-	            	</h4>
+	            	<h5 v-if="!items.length" style="margin: 0 auto;">
+	            		{{ loaded ? 'No item for sale.' : 'Loading items' }}
+	            	</h5>
 
 	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-4 mr-4">
 				       	<div>
@@ -98,7 +98,7 @@
           </div>
         </div>
 		
-		<!-- <footer class="footer">
+		<!-- <footer class="footer mt-2">
 			<div class="footer-copyright text-center py-3">&copy; 2019 Copyright:
 		      <a href="https://twitter.com/williamokafor"> Okafor William</a>
 		    </div>
@@ -120,9 +120,16 @@
 					App.loadItems()
 						.then(items =>{
 							this.items = items;
+							this.loaded = true;
 						})
-						.catch(console.log)
-				}).catch(console.log)
+						.catch(err => {
+							this.loaded = true
+							console.log(err)
+						})
+				}).catch(err => {
+					this.loaded = true
+					console.log(err)
+				})
 			if(this.balance == 0){//Since balance has a default of 0, if the user refreshes the page, it would be zero refetch the bal
 				User.getBalance(this.user.address)
 					.then(bal => this.$store.commit('updateBalance', parseFloat(bal).toFixed(3)))
@@ -136,26 +143,32 @@
 				items: [],
 				loading: false,
 				sell: false,
+				loaded: false,
 				report: ''
 			}
 		},
 		methods: {
 			buyItem (item) {
-				this.loading = true
-				App.buyItem(item)
-					.then(data =>{
-						this.items = data
-						User.getBalance(this.user.address)
-							.then(bal => {
-								this.loading = false
-								this.$store.commit('updateBalance', parseFloat(bal).toFixed(3))
-							})
-					})
-					.catch(err =>{
-						alert('Something went wrong with your request')
-						this.loading = false
-						console.log(err)
-					})
+				if(parseFloat(this.balance) >= parseFloat(item[5]))
+				{
+					this.loading = true
+					App.buyItem(item)
+						.then(data =>{
+							this.items = data
+							User.getBalance(this.user.address)
+								.then(bal => {
+									this.loading = false
+									this.$store.commit('updateBalance', parseFloat(bal).toFixed(3))
+								})
+						})
+						.catch(err =>{
+							alert('Something went wrong with your request')
+							this.loading = false
+							console.log(err)
+						})
+				}else {
+					alert('You don\'t have sufficient ethers to buy this.')
+				}
 			},
 			
 			sellItem () {
