@@ -31,11 +31,12 @@
 	              </ul>
 	            </div>
 
-	            <div id="itemsRow" class="row">
+	            <div id="itemsRow" class="row" style="margin: .25rem!important">
 	            	<h4 v-if="!items.length" style="margin: 0 auto;">
 	            		No item for sale.
 	            	</h4>
-	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-12">
+
+	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-4 mr-4">
 				       	<div>
 				         <div class="card card-default card-article" style="text-align: left;">
 				           <div class="card-heading">
@@ -130,7 +131,7 @@
 		data () {
 			return {
 				name: '',
-				price: 1,
+				price: '1',
 				description: '',
 				items: [],
 				loading: false,
@@ -156,6 +157,7 @@
 						console.log(err)
 					})
 			},
+			
 			sellItem () {
 				this.report = ''
 				if(this.name.trim() != '' && this.price != '' && this.price != 0 && this.description.trim() != '')
