@@ -16,7 +16,8 @@ export default {
   state:{
 	  user,
 	  balance: 0,
-	  events: []
+	  events: [],
+	  message: ''
   },
 
 	mutations:{

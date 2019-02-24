@@ -11,6 +11,7 @@ import storeData from './store'
 import axios from 'axios'
 import {initialize} from './helpers/general.js'
 import Web3HDWalletProvider from 'web3-hdwallet-provider'
+// import HDWalletProvider from 'truffle-hdwallet-provider'
 
 const mnemonic = "mansion vocal brother anxiety empower oak noise prosper select rival intact rich"
 
@@ -47,9 +48,21 @@ window.addEventListener('load', function () {
     // fallback - use your fallback strategy (local node / hosted node + in-dapp id mgmt / fail)
     // window.web3 = new Web3(new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48'))
     // window.web3 = new Web3(new Web3.providers.WebsocketProvider('ws://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48'))
+    
+    // Below uses the Web3 HD Wallet to connect to ropsten
+    // -- this help me communicate with my smart contract since kaleido doesnt work atm
     var httpProvider = new Web3.providers.HttpProvider('https://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48')
     var provider = new Web3HDWalletProvider(mnemonic, httpProvider);
     window.web3 = new Web3(provider)
+
+    
+
+    // Below tries to use truffle hdwaller
+    // var provider = new HDWalletProvider(mnemonic, 'https://ropsten.infura.io/v3/9ce3fce3a4c34accaa192f68222eff48');
+
+    //This is for kaleido -- it would help me manane user accounts
+    provider = new Web3.providers.HttpProvider('https://e0n06zi2jf:o7pe38R9iUyf3Nh5HuYTtV1e_hzQG_DlYckeWA-ICd0@e0ssu47hxk-e0l91isw19-rpc.eu-central-1.kaleido.io')
+    window.kaleido = new Web3(provider)
   }
   initialize(store, router)
   /* eslint-disable no-new */

@@ -67,7 +67,9 @@ const App = {
           let itemFromPromise = await new Promise(function (resolve, reject) {
 
             self.instance.items(parseInt(itemId)).then(item => {//Get the item that corresponds to each id
-              item[5] = parseFloat(window.web3.fromWei(item[5], 'ether')).toFixed(2)
+              // console.log(parseFloat(item[5]))
+              let price = parseFloat(item[5]).toString()
+              item[5] = parseFloat(window.web3.utils.fromWei(price, 'ether')).toFixed(6)
               resolve(item)
             })
             .catch(err =>{
@@ -80,12 +82,6 @@ const App = {
         
       },
 
-      test: function () {
-        let self = this
-        console.log('here')
-        console.log(self.coinbase)
-
-      },
       //getProductItems: async (cart) => {
       // Get product objects
       //   const productItemsPromise = cart.items.map(item => utils.blackAxios.get(`https://vendor-backend.thealternativemall.com/v1/auth/product/byid?_id=${item.product}`, {
@@ -114,19 +110,22 @@ const App = {
      sellItem: function (_name, _price, _description) {
       // Retreive the details of the item you wanna sell
       let self = this
-      _price = window.web3.toWei(parseInt(_price), 'ether');
+      store.state.message = "Verifying transaction..."
+      _price = window.web3.utils.toWei(_price, 'ether');
       if((_name.trim() == '') || (_price == 0)){
         //Incomplete sales details
-      return false;
-       }
+        return false;
+      }
        
        return new Promise((resolve, reject) => {
 
-        self.instance.sellItem(_name, _description, _price, {
-            from: self.userAccount,
+        store.state.message = "Posting item for sale..."
+        self.instance.sellItem(_name, _description, _price, self.userAccount, {
+            from: self.coinbase,
             gas: 500000
             })
         .then(result =>{
+            store.state.message = "Reloading items list..."
             self.loadItems()
                 .then(data => resolve(data))
                 .catch(err=> { reject(data)})
@@ -166,14 +165,34 @@ const App = {
 
   },
   buyItem: async function (item) {
+    store.state.message = "Verifying transaction..."
     let self = this
     var _id = item[0];
-    var _price = item[5];
-    await self.instance.buyItem(_id, {
-      from:self.userAccount,
-      value: web3.toWei(_price, 'ether'),
-      gas: 500000
+    var _price = web3.utils.toWei(item[5], 'ether')
+      console.log('From: '+ self.userAccount.toLowerCase())
+      console.log(_id)
+      console.log(_price)
+
+    await self.instance.buyItem(_id, '0xde5ef9cbfcb1418f4f2bfa6350de05c5acd938ae', _price, {
+      from: self.coinbase
     })
+    store.state.message = "Paying for item..."
+    if (!window.kaleido) { // Means this isnt kaleido
+      await window.web3.eth.sendTransaction({
+        from: self.userAccount,
+        to: item[1],
+        value: _price,
+        gas: 500000
+      })
+    } else{
+      await window.kaleido.eth.sendTransaction({
+        from: self.userAccount,
+        to: item[1],
+        value: _price,
+        gas: 500000
+      })
+    }
+    store.state.message = "Reloading items list..."
     const items = await self.loadItems();
     return items;
   }

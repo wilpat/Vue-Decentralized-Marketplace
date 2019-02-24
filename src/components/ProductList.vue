@@ -1,5 +1,8 @@
 <template>
 	<div>
+		<div id="cover-spin" v-if="loading">
+	      <p id ="content">{{ message }}</p>
+	    </div>
 		<div class="container">
 	        <div class="jumbotron text-center">
 	             <h1>Product List</h1>
@@ -29,6 +32,9 @@
 	            </div>
 
 	            <div id="itemsRow" class="row">
+	            	<h4 v-if="!items.length" style="margin: 0 auto;">
+	            		No item for sale.
+	            	</h4>
 	              	<div id="itemTemplate" v-for="item in items" v-if="item[2] === '0x0000000000000000000000000000000000000000'" class="col-lg-12">
 				       	<div>
 				         <div class="card card-default card-article" style="text-align: left;">
@@ -40,7 +46,7 @@
 				             <strong>Price (ETH)</strong>: <span class="item-price"></span>{{ item[5] }}<br/>
 				             <strong>Sold by</strong>: <span class="item-seller"></span>{{ getSeller(item[1]) }}<br/>
 				           </div>
-				           <div class="card-footer" v-if="user.address !== item[1]">
+				           <div class="card-footer" v-if="user.address.toLowerCase() !== item[1]">
 				             <button class="btn btn-primary btn-success btn-buy" type="button" @click="buyItem(item)">Buy</button>
 				           </div>
 				         </div>
@@ -102,7 +108,7 @@
 /* eslint-disable */
 	import App from '@/js/app'
 	import User from '@/js/users'
-	// import { mapMutations } from 'vuex'
+	import { mapState, mapMutations } from 'vuex'
 	export default {
 		name: 'productlist',
 		created () {
@@ -125,52 +131,52 @@
 				name: '',
 				price: 1,
 				description: '',
-				items: []
+				items: [],
+				loading: false
 			}
 		},
 		methods: {
 			buyItem (item) {
+				this.loading = true
 				App.buyItem(item)
 					.then(data =>{
 						this.items = data
 						User.getBalance(this.user.address)
-							.then(bal => this.$store.commit('updateBalance', parseFloat(bal).toFixed(3)))
+							.then(bal => {
+								this.loading = false
+								this.$store.commit('updateBalance', parseFloat(bal).toFixed(3))
+							})
+					})
+					.catch(err =>{
+						alert('Something went wrong with your request')
+						this.loading = false
+						console.log(err)
 					})
 			},
 			sellItem () {
 
+				this.loading = true
 				App.sellItem(this.name, this.price, this.description)
 					.then(items =>{
+						this.loading = false
 						this.items = items
 					})
-					.catch(console.log)
+					.catch(err => {
+						this.loading = false
+						console.log(err)
+					})
 				// App.test()
 			},
 
 			getSeller (sellerAddress) {
-				return sellerAddress === this.user.address ? 'You' : sellerAddress
+				return sellerAddress === this.user.address.toLowerCase() ? 'You' : sellerAddress
 			},
-
-			logout () {
-				this.$store.commit('logout')
-			}
-			// ...mapMutations(['logout'])
+			...mapMutations(['logout'])
 
 		},
 
 		computed: {
-			// ...mapState(['balance', user', 'events']),
-			balance () {
-		        return this.$store.state.balance
-		    },
-
-		    user () {
-		        return this.$store.state.user
-		    },
-
-		    events () {
-		        return this.$store.state.events
-		    }
+			...mapState(['balance', 'user', 'events', 'message'])
 		}
 
 	}

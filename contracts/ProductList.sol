@@ -9,7 +9,7 @@ contract ProductList is Owner{
 	struct Item {
 
 		uint id;
-		address payable seller;
+		address seller;
 		address buyer;
 		string name;
 		string description;
@@ -27,10 +27,10 @@ contract ProductList is Owner{
 	// 	sellItem('default item', 'description for default item', 1000000000000	000000);
 	// }
 
-	function sellItem (string memory _name, string memory _description, uint256 _price) public {
+	function sellItem (string memory _name, string memory _description, uint256 _price, address _seller) public {
 		itemCounter++;
-		items[itemCounter] = Item(itemCounter, msg.sender, address(0), _name, _description, _price);
-		emit itemSold( itemCounter, msg.sender, _name, _price );
+		items[itemCounter] = Item(itemCounter, _seller, address(0), _name, _description, _price);
+		emit itemSold( itemCounter, _seller, _name, _price );
 	}
 	
 	function getNumberOfItems () public view returns(uint)  {
@@ -59,7 +59,7 @@ contract ProductList is Owner{
 	}
 	
 	
-	function buyItem (uint _id) public payable {//payable meaning this fxn may receive ether from it's caller
+	function buyItem (uint _id, address _buyer, uint _value) public {//payable meaning this fxn may receive ether from it's caller
 		
 
 		require (itemCounter > 0);//Check that an item exists for sale
@@ -72,13 +72,13 @@ contract ProductList is Owner{
 		
 		require (item.buyer == address(0));////This itemm hasnt been sold
 
-		require (msg.sender != item.seller); // The buyer isnt the seller
+		require (_buyer != item.seller); // The buyer isnt the seller
 
-		require (msg.value == item.price); //Amount sent is the price of this item
+		require (_value == item.price); //Amount sent is the price of this item
 
-		item.buyer = msg.sender;//Store the buyer
+		item.buyer = _buyer;//Store the buyer
 
-		item.seller.transfer(msg.value);//transfer funds
+		// item.seller.transfer(msg.value);//transfer funds -- kaleido handles transfers now
 
 		//trigger event
 		emit itemBought(_id, item.buyer, item.seller, item.name, item.price);

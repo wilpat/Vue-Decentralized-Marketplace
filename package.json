@@ -38,7 +38,7 @@
     "vue-router": "^2.8.1",
     "vuex": "^3.1.0",
     "web3": "^1.0.0-beta.36",
-    "web3-eth-personal": "^1.0.0-beta.46",
+    "web3-eth-personal": "^1.0.0-beta.36",
     "web3-hdwallet-provider": "^1.0.4-fix2"
   },
   "devDependencies": {

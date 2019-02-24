@@ -17,9 +17,9 @@ contract Users {
     return (users[_email]);
   }
 
-  function create (bytes32 _email) public {
-    users[_email] = msg.sender ;
-    emit UserCreated( _email, msg.sender);
+  function create (bytes32 _email, address _address) public {
+    users[_email] = _address ;
+    emit UserCreated( _email, _address);
   }
 
   function destroy (bytes32 _email) public {
